@@ -36,7 +36,15 @@ namespace Stock.Controllers
         {
             if (ModelState.IsValid)
             {
-                return await _AutrhenticationServiceProvider.Login(account.AccountName, account.AccountPassword);
+                var _result = await _AutrhenticationServiceProvider.Login(account.AccountName, account.AccountPassword);
+                var _status = _result.StatusCode;
+                switch (_status)
+                {
+                    case 200:
+                        return RedirectToAction("Index", "Home");
+                    default:
+                        return _result;
+                }         
             }
             else
             {
@@ -57,7 +65,16 @@ namespace Stock.Controllers
         {
             if (ModelState.IsValid)
             {
-                return await _AutrhenticationServiceProvider.Register(account.AccountName, account.AccountPassword);
+                var _result = await _AutrhenticationServiceProvider.Register(account.AccountName, account.AccountPassword);
+                var _status = _result.StatusCode;
+
+                switch (_status)
+                {
+                    case 200:
+                        return RedirectToAction("Index", "Home");
+                    default:
+                        return _result;
+                }
             }
             else
             {
@@ -68,7 +85,16 @@ namespace Stock.Controllers
         // GET: Action/Logout
         public async Task<ActionResult> Logout()
         {
-            return await _AutrhenticationServiceProvider.Logout(User.Identity.Name);
+            var _result = await _AutrhenticationServiceProvider.Logout(User.Identity.Name);
+            var _status = _result.StatusCode;
+
+            switch (_status)
+            {
+                case 200:
+                    return RedirectToAction("Index", "Home");
+                default:
+                    return _result;
+            }
         }
     }
 }

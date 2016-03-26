@@ -38,7 +38,6 @@ namespace Stock.Services
 
             _account.IsAuthenticated = true;
             await _applicationDbContext.SaveChangesAsync();
-
             return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 
@@ -49,6 +48,14 @@ namespace Stock.Services
             if (_account == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
+
+            List<Connection> Connections = await _applicationDbContext.Connecions.Where(x => x.CorrespondingAccountName == accountName).ToListAsync();
+
+            foreach(Connection connection in Connections)
+            {
+                _applicationDbContext.Connecions.Remove(connection);
+                _account.AccountConnections.Remove(connection);
             }
 
             FormsAuthentication.SignOut();

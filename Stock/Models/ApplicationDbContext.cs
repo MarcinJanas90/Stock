@@ -10,5 +10,6 @@ namespace Stock.Models
     {
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Share> Shares { get; set; }
+        public DbSet<Connection> Connecions { get; set; }
     }
 }
