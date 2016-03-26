@@ -1,0 +1,26 @@
+﻿@if (User.Identity.IsAuthenticated)
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>
+            <a>Logged in as +@User.Identity.Name</a>
+        </li>
+        <li>
+            <a href="/Account/Details/Aqualorn">
+                <span class="glyphicon glyphicon-cog"></span>
+            </a>
+        </li>
+        <li>
+            <a href="/Account/Logout">
+               <span class="glyphicon glyphicon-off"></span>
+            </a>
+        </li>
+    </ul>
+    
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Register User", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginRegisteredUserLink" })</li>
+    </ul>
+}
