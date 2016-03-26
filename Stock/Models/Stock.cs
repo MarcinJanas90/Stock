@@ -7,11 +7,11 @@ namespace Stock.Models
 {
     public class Stock
     {
-        ICollection<Share> StockShares { get; set; }
+        public ICollection<AvalaibleShareViewModel> StockShares { get; set; }
 
         public Stock()
         {
-            StockShares = new List<Share>();
+            StockShares = new List<AvalaibleShareViewModel>();
         }
     }
 }

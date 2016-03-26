@@ -224,6 +224,8 @@
     <Compile Include="Services\ConnectionServiceProvider.cs" />
     <Compile Include="Services\IAuthenticationServiceProvider.cs" />
     <Compile Include="Services\IConnectionServiceProvider.cs" />
+    <Compile Include="Services\IShareValueServiceProvider.cs" />
+    <Compile Include="Services\ShareValueServiceProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />

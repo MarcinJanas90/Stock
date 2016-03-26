@@ -6,11 +6,14 @@ using System.Web;
 
 namespace Stock.Models
 {
-    public class OwnedShareViewModel
+    public class OwnedShareViewModel : Share
     {
-        [Key]
-        public int OwnedSharesId { get; set; }
-        public int OwnedSharesNumber { get; set; }
-        public Share OwnedShare { get; set; }
+        public int NumberOfOwnedShares { get; set; }
+        public double TotalValue { get; set; }
+    }
+
+    public class AvalaibleShareViewModel : Share
+    {
+        public int UnitsAvalaible { get; set; }
     }
 }
