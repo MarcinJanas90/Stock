@@ -41,7 +41,7 @@ namespace Stock.Controllers
                 switch (_status)
                 {
                     case 200:
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Stock");
                     default:
                         return _result;
                 }         
@@ -65,13 +65,13 @@ namespace Stock.Controllers
         {
             if (ModelState.IsValid)
             {
-                var _result = await _AutrhenticationServiceProvider.Register(account.AccountName, account.AccountPassword);
+                var _result = await _AutrhenticationServiceProvider.Register(account.AccountName, account.AccountPassword,account.AccountWallet);
                 var _status = _result.StatusCode;
 
                 switch (_status)
                 {
                     case 200:
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Stock");
                     default:
                         return _result;
                 }
@@ -82,7 +82,7 @@ namespace Stock.Controllers
             }
         }
 
-        // GET: Action/Logout
+        // GET: Account/Logout
         public async Task<ActionResult> Logout()
         {
             var _result = await _AutrhenticationServiceProvider.Logout(User.Identity.Name);

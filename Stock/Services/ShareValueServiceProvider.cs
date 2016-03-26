@@ -8,6 +8,7 @@ using System.Net;
 using System.IO;
 using Newtonsoft.Json.Linq;
 using System.Timers;
+using System.Data.Entity;
 
 namespace Stock.Services
 {
@@ -31,23 +32,29 @@ namespace Stock.Services
             string ResponseJson = await new StreamReader(Response.GetResponseStream(), true).ReadToEndAsync();
 
             JObject _JObject = JObject.Parse(ResponseJson);
-
             DateTime PublicationDate = (DateTime)_JObject["publicationDate"];
-            JArray Items = (JArray)_JObject["items"];
 
-            foreach (var item in Items)
+            // Check if there are newer sahers values
+
+            Share LatestShare = await _applicationDbContext.Shares.OrderByDescending(x=>x.PublicationDate).FirstOrDefaultAsync();
+
+            if (LatestShare == null || DateTime.Compare(PublicationDate,LatestShare.PublicationDate)>0)
             {
-                Share _share = new Share();
-                _share.CompanyName = (string)item["name"];
-                _share.CompanyCode = (string)item["code"];
-                _share.UnitNumber = (int)item["unit"];
-                _share.UnitPrice = (double)item["price"];
-                _share.PublicationDate = PublicationDate;
+                JArray Items = (JArray)_JObject["items"];
 
-                _applicationDbContext.Shares.Add(_share);
+                foreach (var item in Items)
+                {
+                    Share _share = new Share();
+                    _share.CompanyName = (string)item["name"];
+                    _share.CompanyCode = (string)item["code"];
+                    _share.UnitNumber = (int)item["unit"];
+                    _share.UnitPrice = (double)item["price"];
+                    _share.PublicationDate = PublicationDate;
+
+                    _applicationDbContext.Shares.Add(_share);
+                }
+                await _applicationDbContext.SaveChangesAsync();
             }
-
-            await _applicationDbContext.SaveChangesAsync();
         }
     }
 }

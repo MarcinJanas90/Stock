@@ -37,14 +37,12 @@ namespace Stock.Models
         {
             AccountOwnedShares = new List<OwnedShareViewModel>();
             AccountConnections = new List<Connection>();
-            AccountWallet = 0;
         }
         
         public Account(string accountName,string accountPassword)
         {
             AccountOwnedShares = new List<OwnedShareViewModel>();
             AccountConnections = new List<Connection>();
-            AccountWallet = 0;
             AccountName = accountName;
             AccountPassword = accountPassword;
         }

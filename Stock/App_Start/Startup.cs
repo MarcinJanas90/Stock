@@ -12,7 +12,7 @@ namespace Stock
         {
             GlobalHost.DependencyResolver.Register(
                 typeof(StockHub),
-                () => new StockHub(new ConnectionServiceProvider()));
+                () => new StockHub(new ConnectionServiceProvider(), new UserNotificationServiceProvider()));
             app.MapSignalR();
         }
     }

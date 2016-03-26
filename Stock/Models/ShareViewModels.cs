@@ -11,9 +11,4 @@ namespace Stock.Models
         public int NumberOfOwnedShares { get; set; }
         public double TotalValue { get; set; }
     }
-
-    public class AvalaibleShareViewModel : Share
-    {
-        public int UnitsAvalaible { get; set; }
-    }
 }

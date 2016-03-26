@@ -2,12 +2,11 @@
 Stock.logging = true;
 
 $.connection.hub.start().done(function () {
-    console.log("Connection Started");
     if ($(document).ready()) {
         Stock.server.establishConnection();
     }
 });
 
-Stock.client.EstablishConnection = function () {
+Stock.client.establishConnection = function () {
     console.log("Connection to Client Established");
 }

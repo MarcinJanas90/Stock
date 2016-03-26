@@ -6,6 +6,7 @@ using Microsoft.AspNet.SignalR;
 using System.Threading.Tasks;
 using Stock.Services;
 using Microsoft.AspNet.SignalR.Hubs;
+using Stock.Models;
 
 namespace Stock.Hubs
 {
@@ -13,16 +14,34 @@ namespace Stock.Hubs
     public class StockHub : Hub
     {
         private IConnectionServiceProvider _connectionServiceProvider;
+        private IUserNotificationServiceProvider _userNotificationServiceProvider;
 
+        public StockHub(IConnectionServiceProvider connectionServiceProvider, IUserNotificationServiceProvider userNotificationServiceProvider)
+        {
+            _connectionServiceProvider = connectionServiceProvider;
+            _userNotificationServiceProvider = userNotificationServiceProvider;
+        }
+        
         public void EstablishConnection()
         {
             Clients.Caller.EstablishConnection();
         }
-        public StockHub(IConnectionServiceProvider connectionServiceProvider)
+
+        public async Task RenderStockPrices()
         {
-            _connectionServiceProvider = connectionServiceProvider;
+            await _userNotificationServiceProvider.RenderStockPrices(Context.ConnectionId);
         }
-        
+
+        public async Task RenderWallet()
+        {
+
+        }
+
+        public async Task UpdateStockPrices()
+        {
+
+        }
+
         public override async Task OnConnected()
         {
             await _connectionServiceProvider.ConnectClient(Context.User.Identity.Name, Context.ConnectionId);

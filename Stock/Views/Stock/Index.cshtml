@@ -1,0 +1,47 @@
+﻿
+@{
+    ViewBag.Title = "Stocks";
+}
+
+<div class="row" style="margin-bottom:10px;margin-top:10px"></div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <table class="table table-bordered" id="stockPricesTable">
+            <thead>
+                <tr>
+                    <th colspan="3">
+                        <h3>Stock prices</h3>
+                    </th>
+                </tr>
+                <tr>
+                    <th>Company</th>
+                    <th>Value</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="stockPricesTBody">
+            </tbody>
+        </table>
+    </div>
+    <div class="col-lg-6">
+        <table class="table table-bordered" id="walletTable">
+            <thead>
+                <tr>
+                    <th colspan="5">
+                        <h3>My wallet</h3>
+                    </th>
+                </tr>
+                <tr>
+                    <th>Company</th>
+                    <th>Unit price</th>
+                    <th>Amount</th>
+                    <th>Value</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="myWalletTBody">
+            </tbody>
+        </table>
+    </div>
+</div>

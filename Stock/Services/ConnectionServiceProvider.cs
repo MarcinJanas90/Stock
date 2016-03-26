@@ -5,16 +5,20 @@ using System.Threading.Tasks;
 using System.Web;
 using Stock.Models;
 using System.Data.Entity;
+using Microsoft.AspNet.SignalR;
+using Stock.Hubs;
 
 namespace Stock.Services
 {
     public class ConnectionServiceProvider : IConnectionServiceProvider
     {
         private ApplicationDbContext _applicationDbContext;
+        private IHubContext _StockHubContext;
 
         public ConnectionServiceProvider()
         {
             _applicationDbContext = new ApplicationDbContext();
+            _StockHubContext = GlobalHost.ConnectionManager.GetHubContext<StockHub>();
         }
 
         public async Task ConnectClient(string accountName, string connectionId)
@@ -34,7 +38,6 @@ namespace Stock.Services
                     _applicationDbContext.Connecions.Add(_connection);
                     await _applicationDbContext.SaveChangesAsync();
                 }
-
             }
         }
 

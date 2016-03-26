@@ -65,7 +65,7 @@ namespace Stock.Services
             return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 
-        public async Task<HttpStatusCodeResult> Register(string accountName, string accountPassword)
+        public async Task<HttpStatusCodeResult> Register(string accountName, string accountPassword,double accountWallet)
         {
             Account _account = await _applicationDbContext.Accounts.FirstOrDefaultAsync(x => x.AccountName == accountName);
 
@@ -75,6 +75,7 @@ namespace Stock.Services
             }
 
             _account = new Account(accountName,accountPassword);
+            _account.AccountWallet = accountWallet;
             FormsAuthentication.SetAuthCookie(accountName, false);
             _account.IsAuthenticated = true;
             _applicationDbContext.Accounts.Add(_account);
