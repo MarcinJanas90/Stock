@@ -14,17 +14,20 @@ Stock.client.renderWallet = function (accountWallet, companyCodes, unitPrices, a
             .append(
             '<tr>' +
                 '<th style="vertical-align:middle">' + companyCodes[index] + '</th>' +
-                '<th style="vertical-align:middle">' + unitPrices[index] + '</th>' +
-                '<th style="vertical-align:middle">' + amounts[index] + '</th>' +
-                '<th style="vertical-align:middle">' + values[index] + '</th>' +
-                '<th><buttnon class="btn btn-primary btn-block">Sell</buttnon></th>' +
+                '<th style="vertical-align:middle" id=valueWallet' + companyCodes[index] + '>' + unitPrices[index] + '</th>' +
+                '<th style="vertical-align:middle" id=ammountWallet' + companyCodes[index] + '>' + amounts[index] + '</th>' +
+                '<th style="vertical-align:middle" id=totalValueWallet' + companyCodes[index] + '>' + values[index] + '</th>' +
+                '<th><a href=/Stock/SoldShares/' + companyCodes[index]+ ' class="btn btn-primary btn-block">Sell</a></th>' +
             '</tr>'
             );
     });
     $('#walletTable').find('tbody')
         .append(
             '<tr>' +
-                '<th colspan="3" style="height:50px;background-color:white"></th>' +
+                '<th colspan="5" style="height:50px;background-color:white"></th>' +
+            '</tr>'+
+            '<tr>' +
+                '<th colspan="5" style="height:100px;background-color:white;vertical-align:middle" id="avalaibleMoney"> Avalaible money: ' + accountWallet + ' PLN</th>' +
             '</tr>'
         );
 };

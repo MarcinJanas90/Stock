@@ -226,8 +226,10 @@
     <Compile Include="Services\ConnectionServiceProvider.cs" />
     <Compile Include="Services\IAuthenticationServiceProvider.cs" />
     <Compile Include="Services\IConnectionServiceProvider.cs" />
+    <Compile Include="Services\IShareMarketingServiceProvider.cs" />
     <Compile Include="Services\IShareValueServiceProvider.cs" />
     <Compile Include="Services\IUserNotificationServiceProvider.cs" />
+    <Compile Include="Services\ShareMarketingServiceProvider.cs" />
     <Compile Include="Services\ShareValueServiceProvider.cs" />
     <Compile Include="Services\UserNotificationServiceProvider.cs" />
   </ItemGroup>
@@ -258,9 +260,12 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\Stock\BuyShares.js" />
     <Content Include="Scripts\Stock\RenderStockPrices.js" />
     <Content Include="Scripts\Stock\RenderWallet.js" />
     <Content Include="Scripts\Stock\StartConnectionToStockHub.js" />
+    <Content Include="Scripts\Stock\UpdateStockPrices.js" />
+    <Content Include="Scripts\Stock\UpdateWalletValues.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -282,6 +287,8 @@
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Stock\Index.cshtml" />
+    <Content Include="Views\Stock\BuyShares.cshtml" />
+    <Content Include="Views\Stock\BuyShare.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

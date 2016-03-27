@@ -4,7 +4,7 @@
             Stock.server.renderStockPrices();
             console.log('Server function "RenderStockPrices" invoked');
         };
-    }
+    };
 });
 
 Stock.client.renderStockPrices = function (companyCodes, shareValues) {
@@ -12,10 +12,11 @@ Stock.client.renderStockPrices = function (companyCodes, shareValues) {
     $.each(companyCodes, function (index, value) {
         $('#stockPricesTable').find('tbody')
             .append(
-            '<tr id='+companyCodes[index]+'>' +
+            '<tr>' +
                 '<th style="vertical-align:middle">' + companyCodes[index] + '</th>' +
-                '<th style="vertical-align:middle">' + shareValues[index] + '</th>' +
-                '<th><buttnon class="btn btn-primary btn-block">Buy</buttnon></th>' +
+                '<th style="vertical-align:middle" id=value' + companyCodes[index] + '>' + shareValues[index] + '</th>' +
+                //'<th><a class="btn btn-primary btn-block" id=buySharesButton' + companyCodes[index] + ' value=buyShares' + companyCodes[index] + '>Buy</a></th>' +
+                '<th><a href=/Stock/BuyShares/' + companyCodes[index] + ' class="btn btn-primary btn-block" id="buySharesButton" name=buyShares' + companyCodes[index] + '>Buy</a></th>' +
             '</tr>'
             );
     });

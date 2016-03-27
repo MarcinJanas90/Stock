@@ -11,5 +11,6 @@ namespace Stock.Services
         Task RenderStockPrices(string connectionId);
         Task RenderWallet(string connectionId);
         Task UpdateStockPrices();
+        Task UpdateWalletValues();
     }
 }

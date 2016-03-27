@@ -25,7 +25,7 @@ namespace Stock
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            _ShareValuesServiceProvider = new ShareValueServiceProvider();
+            _ShareValuesServiceProvider = new ShareValueServiceProvider(new UserNotificationServiceProvider());
 
             _timer = new Timer(10000);
             _timer.Elapsed += ShareValueServiceProvider.GetActualShareValues;

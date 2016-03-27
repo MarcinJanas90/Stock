@@ -34,10 +34,10 @@ namespace Stock.Hubs
 
         public async Task RenderWallet()
         {
-
+            await _userNotificationServiceProvider.RenderWallet(Context.ConnectionId);
         }
 
-        public async Task UpdateStockPrices()
+        public async Task BuyShares(string companyName,int numberOfShates)
         {
 
         }

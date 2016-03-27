@@ -38,13 +38,25 @@ namespace Stock.Services
         {
             Connection _connection = await _applicationDbContext.Connecions.FirstOrDefaultAsync(x => x.ConnectionId == connectionId);
             Account _account = await _applicationDbContext.Accounts.FirstOrDefaultAsync(x=>x.AccountName ==_connection.CorrespondingAccountName);
+            List<Share> LatestShares = await _applicationDbContext.Shares.Where(x => x.PublicationDate == _applicationDbContext.Shares.Max(y => y.PublicationDate)).ToListAsync(); ;
 
             if (_account != null)
             {
-                List<string> CompanyCodes = _account.AccountOwnedShares.Select(x => x.CompanyCode).ToList();
-                List<double> UnitPrices = _account.AccountOwnedShares.Select(x => x.UnitPrice).ToList();
-                List<int> Amounts = _account.AccountOwnedShares.Select(x => x.UnitNumber).ToList();
-                List<double> Values = _account.AccountOwnedShares.Select(x => x.TotalValue).ToList();
+                List<string> CompanyCodes = new List<string>();
+                List<double> UnitPrices = new List<double>();
+                List<int> Amounts = new List<int>();
+                List<double> Values = new List<double>();
+
+                foreach (Share share in LatestShares)
+                {
+                    if (_account.AccountOwnedShares.Select(x => x.CompanyCode).ToList().Contains(share.CompanyCode))
+                    {
+                        CompanyCodes.Add(share.CompanyCode);
+                        UnitPrices.Add(share.UnitPrice);
+                        Amounts.Add(_account.AccountOwnedShares.FirstOrDefault(x => x.CompanyCode == share.CompanyCode).NumberOfOwnedShares);
+                        Values.Add(share.UnitPrice* _account.AccountOwnedShares.FirstOrDefault(x => x.CompanyCode == share.CompanyCode).NumberOfOwnedShares);
+                    }
+                }
 
                 _StockHubContext.Clients.Client(connectionId).renderWallet(_account.AccountWallet, CompanyCodes, UnitPrices, Amounts, Values);
             }
@@ -64,6 +76,11 @@ namespace Stock.Services
             {
                 _StockHubContext.Clients.Client(connection.ConnectionId).UpdateStockPrices(CompanyCodes, ShareValues);
             }
+        }
+
+        public async Task UpdateWalletValues()
+        {
+            await _StockHubContext.Clients.All.updateWalletValues();
         }
     }
 }

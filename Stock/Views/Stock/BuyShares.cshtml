@@ -1,0 +1,62 @@
+﻿@model Stock.Models.BoughtShareViewModel
+
+@{
+    ViewBag.Title = "Buy Shares";
+}
+
+<div class="row" style="margin-bottom:10px;margin-top:10px"></div>
+
+<div>
+    <table class="table table-condensed" id="shareInformationTable">
+        <thead>
+            <tr>
+                <th colspan="5">
+                    <h3>Share information</h3>
+                </th>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.CompanyName)</th>
+                <th>@Html.DisplayNameFor(model => model.CompanyCode)</th>
+                <th>@Html.DisplayNameFor(model => model.UnitNumber)</th>
+                <th>@Html.DisplayNameFor(model => model.UnitPrice)</th>
+                <th>@Html.DisplayNameFor(model => model.PublicationDate)</th>
+            </tr>
+        </thead>
+        <tbody id="stockPricesTBody"></tbody>
+        <tr>
+            <th>@Html.DisplayFor(model => model.CompanyName)</th>
+            <th>@Html.DisplayFor(model => model.CompanyCode)</th>
+            <th>@Html.DisplayFor(model => model.UnitNumber)</th>
+            <th>@Html.DisplayFor(model => model.UnitPrice)</th>
+            <th>@Html.DisplayFor(model => model.PublicationDate)</th>
+        </tr>
+    </table>
+</div>
+
+<div class="row" style="margin-bottom:10px;margin-top:10px"></div>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.SharesBoughtAmount, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.SharesBoughtAmount, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.SharesBoughtAmount, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Buy Shares" class="btn btn-default" id="buySharesButton" />
+            </div>
+        </div>
+    </div>
+}
+
+<div class="row" style="margin-bottom:10px;margin-top:10px"></div>

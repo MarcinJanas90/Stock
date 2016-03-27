@@ -15,10 +15,12 @@ namespace Stock.Services
     public class ShareValueServiceProvider
     {
         private static ApplicationDbContext _applicationDbContext;
+        private static IUserNotificationServiceProvider _userNotificationServiceProvider;
 
-        public ShareValueServiceProvider()
+        public ShareValueServiceProvider(IUserNotificationServiceProvider userInterfaceServiceProvider)
         {
             _applicationDbContext = new ApplicationDbContext();
+            _userNotificationServiceProvider = userInterfaceServiceProvider;
         }
 
         public static async void GetActualShareValues(object source, ElapsedEventArgs e)
@@ -42,11 +44,13 @@ namespace Stock.Services
             {
                 JArray Items = (JArray)_JObject["items"];
 
+
                 foreach (var item in Items)
                 {
                     Share _share = new Share();
                     _share.CompanyName = (string)item["name"];
                     _share.CompanyCode = (string)item["code"];
+                    _share.UnitNumber = (int)item["unit"];
                     _share.UnitNumber = (int)item["unit"];
                     _share.UnitPrice = (double)item["price"];
                     _share.PublicationDate = PublicationDate;
@@ -54,6 +58,8 @@ namespace Stock.Services
                     _applicationDbContext.Shares.Add(_share);
                 }
                 await _applicationDbContext.SaveChangesAsync();
+                await _userNotificationServiceProvider.UpdateStockPrices();
+                await _userNotificationServiceProvider.UpdateWalletValues();
             }
         }
     }
