@@ -20,6 +20,88 @@ namespace Stock.Services
             _applicationDbContext = new ApplicationDbContext();
         }
 
+        public async Task<HttpStatusCode> EditAccountName(string currentAccountName, string newAccountName, string accountPassword)
+        {
+            Account _account = await _applicationDbContext.Accounts.FirstOrDefaultAsync(x => x.AccountName == currentAccountName && x.AccountPassword == accountPassword);
+
+            if (_account == null)
+            {
+                return HttpStatusCode.NotFound;
+            }
+
+            if(await _applicationDbContext.Accounts.FirstOrDefaultAsync(x=>x.AccountName==newAccountName)!= null)
+            {
+                return HttpStatusCode.BadRequest;
+            }
+
+            _account.AccountName = newAccountName;
+            FormsAuthentication.SignOut();
+            FormsAuthentication.SetAuthCookie(_account.AccountName, false);
+            await _applicationDbContext.SaveChangesAsync();
+
+            return HttpStatusCode.OK;        
+        }
+
+        public async Task<HttpStatusCode> EditAccountPassword(string accountName, string currentAccountPassword, string newAccountPassword, string confirmNewAccountPassword)
+        {
+            Account _account = await _applicationDbContext.Accounts.FirstOrDefaultAsync(x => x.AccountName == accountName && x.AccountPassword == currentAccountPassword);
+
+            if (_account == null)
+            {
+                return HttpStatusCode.NotFound;
+            }
+
+            if (newAccountPassword != confirmNewAccountPassword)
+            {
+                return HttpStatusCode.BadRequest;
+            }
+
+            _account.AccountPassword = newAccountPassword;
+            await _applicationDbContext.SaveChangesAsync();
+
+            return HttpStatusCode.OK;
+        }
+
+        public async Task<HttpStatusCode> EditAccountWallet(string accountName, string accountPassword, double moneyToAdd, double moneyToSubtract)
+        {
+            Account _account = await _applicationDbContext.Accounts.FirstOrDefaultAsync(x => x.AccountName == accountName && x.AccountPassword == accountPassword);
+
+            if (_account == null)
+            {
+                return HttpStatusCode.NotFound;
+            }
+
+            if ((moneyToAdd == 0 && moneyToSubtract == 0) || (moneyToAdd > 0 && moneyToSubtract > 0) || moneyToSubtract > _account.AccountWallet)
+            {
+                return HttpStatusCode.BadRequest;
+            }
+
+            if (moneyToAdd > 0)
+            {
+                _account.AccountWallet += moneyToAdd;
+            }
+            else
+            {
+                _account.AccountWallet -= moneyToSubtract;
+            }
+
+            await _applicationDbContext.SaveChangesAsync();
+
+            return HttpStatusCode.OK;
+        }
+
+        public async Task<double> GetCurrentWallet(string accountName)
+        {
+            Account _account = await _applicationDbContext.Accounts.FirstOrDefaultAsync(x => x.AccountName == accountName);
+
+            if (_account == null)
+            {
+                return -1;
+            }
+
+            return _account.AccountWallet;
+        }
+
         public async Task<HttpStatusCodeResult> Login(string accountName, string accountPassword)
         {
             Account _account = await _applicationDbContext.Accounts.FirstOrDefaultAsync(x => x.AccountName == accountName && x.AccountPassword == accountPassword);

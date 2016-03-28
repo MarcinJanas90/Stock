@@ -60,6 +60,7 @@ namespace Stock.Services
                 await _applicationDbContext.SaveChangesAsync();
                 await _userNotificationServiceProvider.UpdateStockPrices();
                 await _userNotificationServiceProvider.UpdateWalletValues();
+                await _userNotificationServiceProvider.UpdateChart();
             }
         }
     }

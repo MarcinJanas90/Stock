@@ -17,10 +17,6 @@ namespace Stock.Models
         {
 
         }
-
-        public OwnedShareViewModel(Share share)
-        {
-        }
     }
 
     public class BoughtShareViewModel :  Share
@@ -40,6 +36,41 @@ namespace Stock.Models
             UnitNumber = share.UnitNumber;
             UnitPrice = share.UnitPrice;
             SharesBoughtAmount = 0;
+        }
+    }
+
+    public class SoldShareViewModel : Share , IValidatableObject
+    {
+        public int NumberOfOwnedShares { get; set; }
+        [Range(0,100,ErrorMessage = "The corrent value must be bewteen 0 and 100")]
+        public int NumberOfSoldShares { get; set; }
+
+        public SoldShareViewModel()
+        {
+
+        }
+
+        public SoldShareViewModel(Share share,int numberOfOwnedShares)
+        {
+            this.CompanyCode = share.CompanyCode;
+            this.CompanyName = share.CompanyName;
+            this.PublicationDate = share.PublicationDate;
+            this.UnitNumber = share.UnitNumber;
+            this.UnitPrice = share.UnitPrice;
+            this.NumberOfOwnedShares = numberOfOwnedShares;
+        }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (NumberOfOwnedShares < NumberOfSoldShares)
+            {
+                yield return new ValidationResult("You cannot sell more shares than you have", new[] { "NumberOfSoldShares" });
+            }
+
+            if (NumberOfSoldShares < 0)
+            {
+                yield return new ValidationResult("You cannot sell negative number of shares", new[] { "NumberOfSoldShares" });
+            }
         }
     }
 }

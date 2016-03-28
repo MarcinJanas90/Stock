@@ -17,7 +17,7 @@ Stock.client.renderWallet = function (accountWallet, companyCodes, unitPrices, a
                 '<th style="vertical-align:middle" id=valueWallet' + companyCodes[index] + '>' + unitPrices[index] + '</th>' +
                 '<th style="vertical-align:middle" id=ammountWallet' + companyCodes[index] + '>' + amounts[index] + '</th>' +
                 '<th style="vertical-align:middle" id=totalValueWallet' + companyCodes[index] + '>' + values[index] + '</th>' +
-                '<th><a href=/Stock/SoldShares/' + companyCodes[index]+ ' class="btn btn-primary btn-block">Sell</a></th>' +
+                '<th><a href=/Stock/SellShares/' + companyCodes[index] + ' class="btn btn-primary btn-block">Sell</a></th>' +
             '</tr>'
             );
     });

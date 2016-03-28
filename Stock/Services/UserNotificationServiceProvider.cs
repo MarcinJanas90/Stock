@@ -7,6 +7,7 @@ using System.Web;
 using Stock.Models;
 using Stock.Hubs;
 using System.Data.Entity;
+using System.Web.Script.Serialization;
 
 namespace Stock.Services
 {
@@ -54,11 +55,11 @@ namespace Stock.Services
                         CompanyCodes.Add(share.CompanyCode);
                         UnitPrices.Add(share.UnitPrice);
                         Amounts.Add(_account.AccountOwnedShares.FirstOrDefault(x => x.CompanyCode == share.CompanyCode).NumberOfOwnedShares);
-                        Values.Add(share.UnitPrice* _account.AccountOwnedShares.FirstOrDefault(x => x.CompanyCode == share.CompanyCode).NumberOfOwnedShares);
+                        Values.Add(Math.Round(share.UnitPrice* _account.AccountOwnedShares.FirstOrDefault(x => x.CompanyCode == share.CompanyCode).NumberOfOwnedShares,4));
                     }
                 }
 
-                _StockHubContext.Clients.Client(connectionId).renderWallet(_account.AccountWallet, CompanyCodes, UnitPrices, Amounts, Values);
+                _StockHubContext.Clients.Client(connectionId).renderWallet(Math.Round(_account.AccountWallet,4), CompanyCodes, UnitPrices, Amounts, Values);
             }
         }
 
@@ -81,6 +82,45 @@ namespace Stock.Services
         public async Task UpdateWalletValues()
         {
             await _StockHubContext.Clients.All.updateWalletValues();
+        }
+
+        public async Task ShowChart(string connectionId)
+        {
+            List<Share> LatestShares = await _applicationDbContext.Shares.Where(x => x.PublicationDate == _applicationDbContext.Shares.Max(y => y.PublicationDate)).ToListAsync();
+            List<string> AllLatestSharesNames = LatestShares.Select(x => x.CompanyCode).ToList();
+
+            List<List<double>> LatesMultiShare = new List<List<double>>();
+           
+            foreach (Share share in LatestShares)
+            {
+                LatesMultiShare.Add(await _applicationDbContext.Shares.OrderByDescending(x=>x.PublicationDate).Where(x=>x.CompanyCode==share.CompanyCode).Select(x=>x.UnitPrice).Take(20).ToListAsync());
+            }
+
+            JavaScriptSerializer _serializer = new JavaScriptSerializer();
+            string Json = _serializer.Serialize(LatesMultiShare);
+            string NamesJson = _serializer.Serialize(AllLatestSharesNames);
+
+            _StockHubContext.Clients.Client(connectionId).showChart(Json, NamesJson);
+        }
+
+        public async Task UpdateChart()
+        {
+            List<Share> LatestShares = await _applicationDbContext.Shares.Where(x => x.PublicationDate == _applicationDbContext.Shares.Max(y => y.PublicationDate)).ToListAsync();
+            List<string> AllLatestSharesNames = LatestShares.Select(x => x.CompanyCode).ToList();
+
+            List<List<double>> LatesMultiShare = new List<List<double>>();
+
+            foreach (Share share in LatestShares)
+            {
+                LatesMultiShare.Add(await _applicationDbContext.Shares.OrderByDescending(x => x.PublicationDate).Where(x => x.CompanyCode == share.CompanyCode).Select(x => x.UnitPrice).Take(20).ToListAsync());
+            }
+
+            JavaScriptSerializer _serializer = new JavaScriptSerializer();
+            string Json = _serializer.Serialize(LatesMultiShare);
+            string NamesJson = _serializer.Serialize(AllLatestSharesNames);
+
+            _StockHubContext.Clients.All.updateChart(Json, NamesJson);
+
         }
     }
 }

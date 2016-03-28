@@ -22,12 +22,12 @@
                 <th>@Html.DisplayNameFor(model => model.PublicationDate)</th>
             </tr>
         </thead>
-        <tbody id="stockPricesTBody"></tbody>
+        <tbody id="buySharesTBody"></tbody>
         <tr>
             <th>@Html.DisplayFor(model => model.CompanyName)</th>
             <th>@Html.DisplayFor(model => model.CompanyCode)</th>
             <th>@Html.DisplayFor(model => model.UnitNumber)</th>
-            <th>@Html.DisplayFor(model => model.UnitPrice)</th>
+            <th id="value @Html.DisplayFor(model => model.CompanyCode)">@Html.DisplayFor(model => model.UnitPrice)</th>
             <th>@Html.DisplayFor(model => model.PublicationDate)</th>
         </tr>
     </table>

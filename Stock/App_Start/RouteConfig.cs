@@ -20,6 +20,12 @@ namespace Stock
                 );
 
             routes.MapRoute(
+                name: "SellShares",
+                url: "{controller}/{action}/{companyCode}",
+                defaults: new { controller = "Stock", action = "SellShares", id = UrlParameter.Optional }
+                );
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }

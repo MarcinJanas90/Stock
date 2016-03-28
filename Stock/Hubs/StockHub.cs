@@ -37,9 +37,9 @@ namespace Stock.Hubs
             await _userNotificationServiceProvider.RenderWallet(Context.ConnectionId);
         }
 
-        public async Task BuyShares(string companyName,int numberOfShates)
+        public async Task ShowChart()
         {
-
+            await _userNotificationServiceProvider.ShowChart(Context.ConnectionId);
         }
 
         public override async Task OnConnected()

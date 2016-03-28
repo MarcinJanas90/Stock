@@ -15,7 +15,6 @@ Stock.client.renderStockPrices = function (companyCodes, shareValues) {
             '<tr>' +
                 '<th style="vertical-align:middle">' + companyCodes[index] + '</th>' +
                 '<th style="vertical-align:middle" id=value' + companyCodes[index] + '>' + shareValues[index] + '</th>' +
-                //'<th><a class="btn btn-primary btn-block" id=buySharesButton' + companyCodes[index] + ' value=buyShares' + companyCodes[index] + '>Buy</a></th>' +
                 '<th><a href=/Stock/BuyShares/' + companyCodes[index] + ' class="btn btn-primary btn-block" id="buySharesButton" name=buyShares' + companyCodes[index] + '>Buy</a></th>' +
             '</tr>'
             );

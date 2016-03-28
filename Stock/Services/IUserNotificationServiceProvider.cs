@@ -10,6 +10,8 @@ namespace Stock.Services
     {
         Task RenderStockPrices(string connectionId);
         Task RenderWallet(string connectionId);
+        Task ShowChart(string connectionId);
+        Task UpdateChart();
         Task UpdateStockPrices();
         Task UpdateWalletValues();
     }
