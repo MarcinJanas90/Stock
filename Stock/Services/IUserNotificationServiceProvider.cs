@@ -14,5 +14,8 @@ namespace Stock.Services
         Task UpdateChart();
         Task UpdateStockPrices();
         Task UpdateWalletValues();
+        Task DisableButtons();
+        Task EnableButtons();
+        Task RenderConnectionStatus(string connectionId);
     }
 }

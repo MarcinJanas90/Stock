@@ -9,6 +9,7 @@ using System.IO;
 using Newtonsoft.Json.Linq;
 using System.Timers;
 using System.Data.Entity;
+using Stock.App_Start;
 
 namespace Stock.Services
 {
@@ -30,37 +31,63 @@ namespace Stock.Services
             Request.Accept = "application/json";
             Request.Method = "GET";
 
-            var Response = (HttpWebResponse)await Request.GetResponseAsync();
-            string ResponseJson = await new StreamReader(Response.GetResponseStream(), true).ReadToEndAsync();
-
-            JObject _JObject = JObject.Parse(ResponseJson);
-            DateTime PublicationDate = (DateTime)_JObject["publicationDate"];
-
-            // Check if there are newer sahers values
-
-            Share LatestShare = await _applicationDbContext.Shares.OrderByDescending(x=>x.PublicationDate).FirstOrDefaultAsync();
-
-            if (LatestShare == null || DateTime.Compare(PublicationDate,LatestShare.PublicationDate)>0)
+            HttpWebResponse Response;
+            try
             {
-                JArray Items = (JArray)_JObject["items"];
+                Response = (HttpWebResponse)await Request.GetResponseAsync();
+            }
+            catch
+            {
+                Response = null;
+            }
 
-
-                foreach (var item in Items)
+            if (Response != null && Response.StatusCode.Equals(HttpStatusCode.OK))
+            {
+                if (ApplicationGlobals.IsRemoteServerAvalaible != true)
                 {
-                    Share _share = new Share();
-                    _share.CompanyName = (string)item["name"];
-                    _share.CompanyCode = (string)item["code"];
-                    _share.UnitNumber = (int)item["unit"];
-                    _share.UnitNumber = (int)item["unit"];
-                    _share.UnitPrice = (double)item["price"];
-                    _share.PublicationDate = PublicationDate;
-
-                    _applicationDbContext.Shares.Add(_share);
+                    ApplicationGlobals.IsRemoteServerAvalaible = true;
+                    await _userNotificationServiceProvider.EnableButtons();
                 }
-                await _applicationDbContext.SaveChangesAsync();
-                await _userNotificationServiceProvider.UpdateStockPrices();
-                await _userNotificationServiceProvider.UpdateWalletValues();
-                await _userNotificationServiceProvider.UpdateChart();
+
+                string ResponseJson = await new StreamReader(Response.GetResponseStream(), true).ReadToEndAsync();
+
+                JObject _JObject = JObject.Parse(ResponseJson);
+                DateTime PublicationDate = (DateTime)_JObject["publicationDate"];
+
+                // Check if there are newer sahers values
+
+                Share LatestShare = await _applicationDbContext.Shares.OrderByDescending(x => x.PublicationDate).FirstOrDefaultAsync();
+
+                if (LatestShare == null || DateTime.Compare(PublicationDate, LatestShare.PublicationDate) > 0)
+                {
+                    JArray Items = (JArray)_JObject["items"];
+
+
+                    foreach (var item in Items)
+                    {
+                        Share _share = new Share();
+                        _share.CompanyName = (string)item["name"];
+                        _share.CompanyCode = (string)item["code"];
+                        _share.UnitNumber = (int)item["unit"];
+                        _share.UnitNumber = (int)item["unit"];
+                        _share.UnitPrice = (double)item["price"];
+                        _share.PublicationDate = PublicationDate;
+
+                        _applicationDbContext.Shares.Add(_share);
+                    }
+                    await _applicationDbContext.SaveChangesAsync();
+                    await _userNotificationServiceProvider.UpdateStockPrices();
+                    await _userNotificationServiceProvider.UpdateWalletValues();
+                    await _userNotificationServiceProvider.UpdateChart();
+                }
+            }
+            else
+            {
+                if (ApplicationGlobals.IsRemoteServerAvalaible != false)
+                {
+                    ApplicationGlobals.IsRemoteServerAvalaible = false;
+                    await _userNotificationServiceProvider.DisableButtons();
+                }
             }
         }
     }

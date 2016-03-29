@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Stock.Services;
 using Microsoft.AspNet.SignalR.Hubs;
 using Stock.Models;
+using Stock.App_Start;
 
 namespace Stock.Hubs
 {
@@ -45,6 +46,7 @@ namespace Stock.Hubs
         public override async Task OnConnected()
         {
             await _connectionServiceProvider.ConnectClient(Context.User.Identity.Name, Context.ConnectionId);
+            await _userNotificationServiceProvider.RenderConnectionStatus(Context.ConnectionId);
             await base.OnConnected();
         }
 

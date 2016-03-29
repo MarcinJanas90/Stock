@@ -8,6 +8,7 @@ using Stock.Models;
 using Stock.Hubs;
 using System.Data.Entity;
 using System.Web.Script.Serialization;
+using Stock.App_Start;
 
 namespace Stock.Services
 {
@@ -50,12 +51,12 @@ namespace Stock.Services
 
                 foreach (Share share in LatestShares)
                 {
-                    if (_account.AccountOwnedShares.Select(x => x.CompanyCode).ToList().Contains(share.CompanyCode))
+                    if (_account.AccountOwnedShares.Select(x => x.OwnedShareCompanyCode).ToList().Contains(share.CompanyCode))
                     {
                         CompanyCodes.Add(share.CompanyCode);
                         UnitPrices.Add(share.UnitPrice);
-                        Amounts.Add(_account.AccountOwnedShares.FirstOrDefault(x => x.CompanyCode == share.CompanyCode).NumberOfOwnedShares);
-                        Values.Add(Math.Round(share.UnitPrice* _account.AccountOwnedShares.FirstOrDefault(x => x.CompanyCode == share.CompanyCode).NumberOfOwnedShares,4));
+                        Amounts.Add(_account.AccountOwnedShares.FirstOrDefault(x => x.OwnedShareCompanyCode == share.CompanyCode).NumberOfOwnedShares);
+                        Values.Add(Math.Round(share.UnitPrice* _account.AccountOwnedShares.FirstOrDefault(x => x.OwnedShareCompanyCode == share.CompanyCode).NumberOfOwnedShares,4));
                     }
                 }
 
@@ -121,6 +122,22 @@ namespace Stock.Services
 
             _StockHubContext.Clients.All.updateChart(Json, NamesJson);
 
+        }
+
+        public async Task DisableButtons()
+        {
+            await _StockHubContext.Clients.All.connectionDisabled();
+        }
+
+        public async Task EnableButtons()
+        {
+            await _StockHubContext.Clients.All.connectionEnabled();
+
+        }
+
+        public async Task RenderConnectionStatus(string connectionId)
+        {
+            await _StockHubContext.Clients.Client(connectionId).renderConnectionStatus(ApplicationGlobals.IsRemoteServerAvalaible);
         }
     }
 }

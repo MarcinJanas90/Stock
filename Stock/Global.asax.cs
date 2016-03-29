@@ -11,6 +11,7 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using Stock.Services;
 using Newtonsoft.Json.Linq;
+using Stock.App_Start;
 
 namespace Stock
 {
@@ -25,7 +26,10 @@ namespace Stock
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
             _ShareValuesServiceProvider = new ShareValueServiceProvider(new UserNotificationServiceProvider());
+
+            ApplicationGlobals.IsRemoteServerAvalaible = true;
 
             _timer = new Timer(10000);
             _timer.Elapsed += ShareValueServiceProvider.GetActualShareValues;

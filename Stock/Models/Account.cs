@@ -31,17 +31,17 @@ namespace Stock.Models
         [Display(Name = "Wallet")]
         public double AccountWallet { get; set; }
 
-        public virtual ICollection<OwnedShareViewModel> AccountOwnedShares { get; set; }
+        public virtual ICollection<OwnedShare> AccountOwnedShares { get; set; }
 
         public Account()
         {
-            AccountOwnedShares = new List<OwnedShareViewModel>();
+            AccountOwnedShares = new List<OwnedShare>();
             AccountConnections = new List<Connection>();
         }
         
         public Account(string accountName,string accountPassword)
         {
-            AccountOwnedShares = new List<OwnedShareViewModel>();
+            AccountOwnedShares = new List<OwnedShare>();
             AccountConnections = new List<Connection>();
             AccountName = accountName;
             AccountPassword = accountPassword;
