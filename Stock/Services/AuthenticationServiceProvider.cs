@@ -102,58 +102,50 @@ namespace Stock.Services
             return _account.AccountWallet;
         }
 
-        public async Task<HttpStatusCodeResult> Login(string accountName, string accountPassword)
+        public async Task<HttpStatusCode> Login(string accountName, string accountPassword)
         {
             Account _account = await _applicationDbContext.Accounts.FirstOrDefaultAsync(x => x.AccountName == accountName && x.AccountPassword == accountPassword);
 
             if (_account == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+                return HttpStatusCode.NotFound;
             }
 
             if (_account.IsAuthenticated == true)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return HttpStatusCode.BadRequest;
             }
 
             FormsAuthentication.SetAuthCookie(accountName, false);
 
             _account.IsAuthenticated = true;
             await _applicationDbContext.SaveChangesAsync();
-            return new HttpStatusCodeResult(HttpStatusCode.OK);
+            return HttpStatusCode.OK;
         }
 
-        public async Task<HttpStatusCodeResult> Logout(string accountName)
+        public async Task<HttpStatusCode> Logout(string accountName)
         {
             Account _account = await _applicationDbContext.Accounts.FirstOrDefaultAsync(x => x.AccountName == accountName);
 
             if (_account == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
-            }
-
-            List<Connection> Connections = await _applicationDbContext.Connecions.Where(x => x.CorrespondingAccountName == accountName).ToListAsync();
-
-            foreach(Connection connection in Connections)
-            {
-                _applicationDbContext.Connecions.Remove(connection);
-                _account.AccountConnections.Remove(connection);
+                return HttpStatusCode.NotFound;
             }
 
             FormsAuthentication.SignOut();
             _account.IsAuthenticated = false;
             await _applicationDbContext.SaveChangesAsync();
 
-            return new HttpStatusCodeResult(HttpStatusCode.OK);
+            return HttpStatusCode.OK;
         }
 
-        public async Task<HttpStatusCodeResult> Register(string accountName, string accountPassword,double accountWallet)
+        public async Task<HttpStatusCode> Register(string accountName, string accountPassword,double accountWallet)
         {
             Account _account = await _applicationDbContext.Accounts.FirstOrDefaultAsync(x => x.AccountName == accountName);
 
             if (_account != null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return HttpStatusCode.BadRequest;
             }
 
             _account = new Account(accountName,accountPassword);
@@ -163,7 +155,7 @@ namespace Stock.Services
             _applicationDbContext.Accounts.Add(_account);
             await _applicationDbContext.SaveChangesAsync();
 
-            return new HttpStatusCodeResult(HttpStatusCode.OK);
+            return HttpStatusCode.OK;
         }
     }
 }

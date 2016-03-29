@@ -12,11 +12,11 @@ namespace Stock.Controllers
 {
     public class AccountController : Controller
     {
-        private IAuthenticationServiceProvider _AutrhenticationServiceProvider;
+        private IAuthenticationServiceProvider _AuthenticationServiceProvider;
 
         public AccountController(IAuthenticationServiceProvider authenticationServiceProvider)
         {
-            _AutrhenticationServiceProvider = authenticationServiceProvider;
+            _AuthenticationServiceProvider = authenticationServiceProvider;
         }
 
         // GET: Account
@@ -37,20 +37,17 @@ namespace Stock.Controllers
         {
             if (ModelState.IsValid)
             {
-                var _result = await _AutrhenticationServiceProvider.Login(account.AccountName, account.AccountPassword);
-                var _status = _result.StatusCode;
-                switch (_status)
+                var Status = await _AuthenticationServiceProvider.Login(account.AccountName, account.AccountPassword);
+
+                if (Status.Equals(HttpStatusCode.OK))
                 {
-                    case 200:
-                        return RedirectToAction("Index", "Stock");
-                    default:
-                        return _result;
+                    return RedirectToAction("Index", "Stock");
                 }
+
+                return new HttpStatusCodeResult(Status);
             }
-            else
-            {
-                return View();
-            }
+
+            return View();
 
         }
 
@@ -66,36 +63,30 @@ namespace Stock.Controllers
         {
             if (ModelState.IsValid)
             {
-                var _result = await _AutrhenticationServiceProvider.Register(account.AccountName, account.AccountPassword, account.AccountWallet);
-                var _status = _result.StatusCode;
+                var Status = await _AuthenticationServiceProvider.Register(account.AccountName, account.AccountPassword, account.AccountWallet);
 
-                switch (_status)
+                if (Status.Equals(HttpStatusCode.OK))
                 {
-                    case 200:
-                        return RedirectToAction("Index", "Stock");
-                    default:
-                        return _result;
+                    return RedirectToAction("Index", "Stock");
                 }
+
+                return new HttpStatusCodeResult(Status);
             }
-            else
-            {
-                return View();
-            }
+
+            return View();
         }
 
         // GET: Account/Logout
         public async Task<ActionResult> Logout()
         {
-            var _result = await _AutrhenticationServiceProvider.Logout(User.Identity.Name);
-            var _status = _result.StatusCode;
+            var Status = await _AuthenticationServiceProvider.Logout(User.Identity.Name);
 
-            switch (_status)
+            if (Status.Equals(HttpStatusCode.OK))
             {
-                case 200:
-                    return RedirectToAction("Index", "Home");
-                default:
-                    return _result;
+                return RedirectToAction("Index", "Home");
             }
+
+            return new HttpStatusCodeResult(Status);
         }
 
         // GET: Account/EditAccountName
@@ -112,14 +103,14 @@ namespace Stock.Controllers
         {
             if (ModelState.IsValid)
             {
-                var Status = await _AutrhenticationServiceProvider.EditAccountName(User.Identity.Name, editAccountViewModel.NewAccountName, editAccountViewModel.AccountPassword);
+                var Status = await _AuthenticationServiceProvider.EditAccountName(User.Identity.Name, editAccountViewModel.NewAccountName, editAccountViewModel.AccountPassword);
 
-                if (!Status.Equals(HttpStatusCode.OK))
+                if (Status.Equals(HttpStatusCode.OK))
                 {
-                    return new HttpStatusCodeResult(Status);
+                    return RedirectToAction("Index", "Stock");
                 }
 
-                return RedirectToAction("Index", "Home");
+                return new HttpStatusCodeResult(Status);
             }
             else
             {
@@ -141,11 +132,11 @@ namespace Stock.Controllers
         {
             if (ModelState.IsValid)
             {
-                var Status = await _AutrhenticationServiceProvider.EditAccountPassword(User.Identity.Name, editAccountPasswordViewModel.CurrenrPasword, editAccountPasswordViewModel.NewPassowrd, editAccountPasswordViewModel.ConfirmNewPassword);
+                var Status = await _AuthenticationServiceProvider.EditAccountPassword(User.Identity.Name, editAccountPasswordViewModel.CurrenrPasword, editAccountPasswordViewModel.NewPassowrd, editAccountPasswordViewModel.ConfirmNewPassword);
 
-                if (!Status.Equals(HttpStatusCode.OK))
+                if (Status.Equals(HttpStatusCode.OK))
                 {
-                    return new HttpStatusCodeResult(Status);
+                    return RedirectToAction("Index", "Stock");
                 }
 
                 return RedirectToAction("Index", "Stock");
@@ -160,10 +151,7 @@ namespace Stock.Controllers
         [Authorize]
         public async Task<ActionResult> EditAccountWallet()
         {
-            EditAccountWalletViewModel _editAccountWalletViewModel = new EditAccountWalletViewModel();
-            _editAccountWalletViewModel.CurrentWallet = await _AutrhenticationServiceProvider.GetCurrentWallet(User.Identity.Name);
-            return View(_editAccountWalletViewModel);
-
+            return View(await _AuthenticationServiceProvider.GetCurrentWallet(User.Identity.Name));
         }
 
         // POST: Account/EditAccountWallet/editAccountWalletViewModel
@@ -173,14 +161,13 @@ namespace Stock.Controllers
         {
             if (ModelState.IsValid)
             {
-                var Status = await _AutrhenticationServiceProvider.EditAccountWallet(User.Identity.Name, _editAccountWalletViewModel.AccountPassword, _editAccountWalletViewModel.WalletToAdd, _editAccountWalletViewModel.WalletToSubtract);
+                var Status = await _AuthenticationServiceProvider.EditAccountWallet(User.Identity.Name, _editAccountWalletViewModel.AccountPassword, _editAccountWalletViewModel.WalletToAdd, _editAccountWalletViewModel.WalletToSubtract);
 
-                if (!Status.Equals(HttpStatusCode.OK))
+                if (Status.Equals(HttpStatusCode.OK))
                 {
-                    return new HttpStatusCodeResult(Status);
+                    return RedirectToAction("Index", "Stock");
                 }
-
-                return RedirectToAction("Index", "Stock");
+                return new HttpStatusCodeResult(Status);
             }
 
             return View();

@@ -45,8 +45,19 @@ namespace Stock.Controllers
         [HttpPost]
         public async Task<ActionResult> BuyShares(BoughtShareViewModel boughShareViewModel)
         {
-            await _shareMarketServiceProvider.BuyShare(User.Identity.Name,boughShareViewModel.CompanyCode,boughShareViewModel.SharesBoughtAmount);
-            return RedirectToAction("Index", "Stock");
+            if (ModelState.IsValid)
+            {
+                var Status = await _shareMarketServiceProvider.BuyShare(User.Identity.Name, boughShareViewModel.CompanyCode, boughShareViewModel.SharesBoughtAmount);
+                
+                if (Status.Equals(HttpStatusCode.OK))
+                {
+                    return RedirectToAction("Index", "Stock");
+                }
+
+                return new HttpStatusCodeResult(Status);
+            }
+
+            return View();
         }
 
         // GET: Stock/SellShares/companyCode
@@ -68,14 +79,19 @@ namespace Stock.Controllers
         [HttpPost]
         public async Task<ActionResult> SellShares(SoldShareViewModel soldShareViewModel)
         {
-            var Result = await _shareMarketServiceProvider.SellShare(User.Identity.Name, soldShareViewModel.CompanyCode, soldShareViewModel.NumberOfSoldShares);
-
-            if (!Result.StatusCode.Equals((int)HttpStatusCode.OK))
+            if (ModelState.IsValid)
             {
-                return Result;
+                var Status = await _shareMarketServiceProvider.SellShare(User.Identity.Name, soldShareViewModel.CompanyCode, soldShareViewModel.NumberOfSoldShares);
+
+                if (Status.Equals(HttpStatusCode.OK))
+                {
+                    return RedirectToAction("Index", "Stock");
+                }
+
+                return new HttpStatusCodeResult(Status);
             }
 
-            return RedirectToAction("Index", "Stock");
+            return View();
         }
 
     }

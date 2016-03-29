@@ -5,6 +5,7 @@ using System.Text;
 using Stock.Models;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Net;
 
 namespace Stock.Services
 {
@@ -16,8 +17,8 @@ namespace Stock.Services
 
         Task<SoldShareViewModel> GetCurrentSoldShareInformation(string accountName, string companyCode);
 
-        Task BuyShare(string accountName, string shareCompanyCode, int numberOfShares);
+        Task<HttpStatusCode> BuyShare(string accountName, string shareCompanyCode, int numberOfShares);
 
-        Task<HttpStatusCodeResult> SellShare(string accountName, string shareCompanyCode, int numberOfShares);
+        Task<HttpStatusCode> SellShare(string accountName, string shareCompanyCode, int numberOfShares);
     }
 }
