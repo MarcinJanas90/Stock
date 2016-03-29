@@ -3,6 +3,8 @@
     $.each(companyCodes, function (index, value) {
         $('#value' + value).empty();
         $('#value' + value).append(shareValues[index]);
+        $('#value ' + value).empty();
+        $('#value ' + value).append(shareValues[index]);
         $('#valueWallet' + value).empty();
         $('#valueWallet' + value).append(shareValues[index]);
     });

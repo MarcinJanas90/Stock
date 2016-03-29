@@ -7,6 +7,7 @@ using Stock.Models;
 using System.Data.Entity;
 using Microsoft.AspNet.SignalR;
 using Stock.Hubs;
+using System.Web.Security;
 
 namespace Stock.Services
 {
@@ -24,6 +25,11 @@ namespace Stock.Services
         public async Task ConnectClient(string accountName, string connectionId)
         {
             Account _account = await _applicationDbContext.Accounts.FirstOrDefaultAsync(x => x.AccountName == accountName);
+
+            if (_account != null && !_account.IsAuthenticated)
+            {
+                FormsAuthentication.SignOut();
+            }
 
             if (_account != null && _account.IsAuthenticated)
             {
@@ -55,6 +61,11 @@ namespace Stock.Services
             if (_account != null)
             {
                 _account.AccountConnections.Remove(_connection);
+            }
+
+            if (_account.AccountConnections.Count == 0)
+            {
+                _account.IsAuthenticated = false;
             }
 
             await _applicationDbContext.SaveChangesAsync();

@@ -19,7 +19,7 @@ namespace Stock.Models
         public string AccountPassword { get; set; }
     }
 
-    public class EditAccountPasswordViewModel : IValidatableObject
+    public class EditAccountPasswordViewModel
     {
         [Required]
         [StringLength(20, MinimumLength = 2, ErrorMessage = "Entered password has wrong size, it should be between 2 and 20 characters")]
@@ -36,14 +36,9 @@ namespace Stock.Models
         [DataType(DataType.Password)]
         [Display(Name = "Confirm New Password")]
         public string ConfirmNewPassword { get; set; }
-
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            throw new NotImplementedException();
-        }
     }
 
-    public class EditAccountWalletViewModel : IValidatableObject
+    public class EditAccountWalletViewModel
     {
         [DataType(DataType.Currency)]
         [Display(Name = "Current money")]
@@ -59,13 +54,5 @@ namespace Stock.Models
         [DataType(DataType.Password)]
         [Display(Name = "Account Password")]
         public string AccountPassword { get; set; }
-
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            if (WalletToSubtract > 0 && WalletToAdd > 0)
-            {
-                yield return new ValidationResult("You cannot add and subtract money add the same time", new[] { "WalletToAdd" , "WalletToSubtract" });
-            }
-        }
     }
 }

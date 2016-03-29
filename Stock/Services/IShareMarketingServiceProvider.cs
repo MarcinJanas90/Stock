@@ -13,7 +13,7 @@ namespace Stock.Services
     {
         Task<Share> GetLatestShareInformationByCompanyCode(string companyCode);
 
-        Task<BoughtShareViewModel> GetCurrentShareInformation(string companyCode);
+        Task<BoughtShareViewModel> GetCurrentBoughtShareInformation(string companyCode);
 
         Task<SoldShareViewModel> GetCurrentSoldShareInformation(string accountName, string companyCode);
 

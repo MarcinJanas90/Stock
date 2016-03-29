@@ -10,5 +10,7 @@ namespace Stock.Services
     public interface IShareValueServiceProvider
     {
         Task GetActualShareValues();
+
+        void InitializeShareValues();
     }
 }

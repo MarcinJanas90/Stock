@@ -31,6 +31,7 @@ namespace Stock
 
             ApplicationGlobals.IsRemoteServerAvalaible = true;
 
+            _ShareValuesServiceProvider.InitializeShareValues();
             _timer = new Timer(10000);
             _timer.Elapsed += ShareValueServiceProvider.GetActualShareValues;
             _timer.Start();

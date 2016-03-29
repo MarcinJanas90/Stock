@@ -30,7 +30,7 @@ namespace Stock.Controllers
         [Authorize]
         public async Task<ActionResult> BuyShares(string companyCode)
         {
-            BoughtShareViewModel _boughtShareViewModel = await _shareMarketServiceProvider.GetCurrentShareInformation(companyCode);
+            BoughtShareViewModel _boughtShareViewModel = await _shareMarketServiceProvider.GetCurrentBoughtShareInformation(companyCode);
 
             if (_boughtShareViewModel == null)
             {

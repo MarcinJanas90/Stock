@@ -12,12 +12,12 @@ namespace Stock.Models
     {
         [Key]
         public int AccountID { get; set; }
-        [Required]
+        [Required(ErrorMessage = "This field cannot be empty")]
         [Column("AccountName")]
         [StringLength(20, MinimumLength = 2,ErrorMessage = "Entered name has wrong size, it should be between 2 and 20 characters")]
         [Display(Name = "Account Name")]
         public string AccountName { get; set; }
-        [Required]
+        [Required(ErrorMessage = "This field cannot be empty")]
         [Column("AccountPassword")]
         [StringLength(20, MinimumLength = 2, ErrorMessage = "Entered password has wrong size, it should be between 2 and 20 characters")]
         [DataType(DataType.Password)]

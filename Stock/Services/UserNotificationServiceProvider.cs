@@ -124,12 +124,12 @@ namespace Stock.Services
 
         }
 
-        public async Task DisableButtons()
+        public async Task RenderConnectionProblem()
         {
             await _StockHubContext.Clients.All.connectionDisabled();
         }
 
-        public async Task EnableButtons()
+        public async Task RenderConnectionOK()
         {
             await _StockHubContext.Clients.All.connectionEnabled();
 

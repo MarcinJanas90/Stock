@@ -90,16 +90,19 @@ namespace Stock.Services
             return HttpStatusCode.OK;
         }
 
-        public async Task<double> GetCurrentWallet(string accountName)
+        public async Task<EditAccountWalletViewModel> GetCurrentWallet(string accountName)
         {
             Account _account = await _applicationDbContext.Accounts.FirstOrDefaultAsync(x => x.AccountName == accountName);
 
             if (_account == null)
             {
-                return -1;
+                return null;
             }
 
-            return _account.AccountWallet;
+            EditAccountWalletViewModel _editAccountWalletViewModel = new EditAccountWalletViewModel();
+            _editAccountWalletViewModel.CurrentWallet = _account.AccountWallet;
+
+            return _editAccountWalletViewModel;
         }
 
         public async Task<HttpStatusCode> Login(string accountName, string accountPassword)

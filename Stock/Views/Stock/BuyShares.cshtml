@@ -35,14 +35,17 @@
 
 <div class="row" style="margin-bottom:10px;margin-top:10px"></div>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm(null,null,FormMethod.Post,new { id = "buySharesForm" }))
 {
     @Html.AntiForgeryToken()
-
+    
     <div class="form-horizontal">
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
+        @Html.HiddenFor(model => model.UnitNumber)
+        <input type="hidden" value="@Model.UnitNumber" id="@Html.DisplayNameFor(model => model.UnitNumber)"/>
+        
         <div class="form-group">
             @Html.LabelFor(model => model.SharesBoughtAmount, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">

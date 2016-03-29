@@ -12,23 +12,18 @@ namespace Stock.Models
     {
         [Key]
         public int ShareId { get; set; }
-        [Required]
         [Column("CompanyName")]
         [Display(Name = "Company")]
-        public string CompanyName { get; set; }
-        [Required]
+        public virtual string CompanyName { get; set; }
         [Column("CompanyCode")]
         [Display(Name = "Company Code")]
         public string CompanyCode { get; set; }
-        [Required]
         [Column("UnitNumber")]
         [Display(Name = "Units number")]
         public int UnitNumber { get; set; }
-        [Required]
         [Column("ShareValue")]
         [Display(Name =  "Value")]
         public double UnitPrice { get; set; }
-        [Required]
         [DataType(DataType.DateTime)]
         [Column("PublicationDate")]
         [Display(Name = "Publication Date")]

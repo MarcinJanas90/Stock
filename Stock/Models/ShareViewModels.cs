@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Stock.Models
 {
-    public class BoughtShareViewModel :  Share
+    public class BoughtShareViewModel : Share
     {
         public int SharesBoughtAmount { get; set; }
 
@@ -26,11 +26,12 @@ namespace Stock.Models
         }
     }
 
-    public class SoldShareViewModel : Share , IValidatableObject
+    public class SoldShareViewModel : Share
     {
         public int NumberOfOwnedShares { get; set; }
         [Range(0,100,ErrorMessage = "The corrent value must be bewteen 0 and 100")]
         public int NumberOfSoldShares { get; set; }
+        public double TotalValue { get; set; }
 
         public SoldShareViewModel()
         {
@@ -45,19 +46,7 @@ namespace Stock.Models
             this.UnitNumber = share.UnitNumber;
             this.UnitPrice = share.UnitPrice;
             this.NumberOfOwnedShares = numberOfOwnedShares;
-        }
-
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            if (NumberOfOwnedShares < NumberOfSoldShares)
-            {
-                yield return new ValidationResult("You cannot sell more shares than you have", new[] { "NumberOfSoldShares" });
-            }
-
-            if (NumberOfSoldShares < 0)
-            {
-                yield return new ValidationResult("You cannot sell negative number of shares", new[] { "NumberOfSoldShares" });
-            }
+            this.TotalValue = UnitPrice * NumberOfOwnedShares;
         }
     }
 
