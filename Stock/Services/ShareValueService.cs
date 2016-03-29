@@ -13,12 +13,12 @@ using Stock.App_Start;
 
 namespace Stock.Services
 {
-    public class ShareValueServiceProvider
+    public class ShareValueService
     {
         private static ApplicationDbContext _applicationDbContext;
-        private static IUserNotificationServiceProvider _userNotificationServiceProvider;
+        private static IUserNotificationService _userNotificationServiceProvider;
 
-        public ShareValueServiceProvider(IUserNotificationServiceProvider userInterfaceServiceProvider)
+        public ShareValueService(IUserNotificationService userInterfaceServiceProvider)
         {
             _applicationDbContext = new ApplicationDbContext();
             _userNotificationServiceProvider = userInterfaceServiceProvider;

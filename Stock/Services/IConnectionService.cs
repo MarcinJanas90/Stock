@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Stock.Services
 {
-    public interface IConnectionServiceProvider
+    public interface IConnectionService
     {
         Task ConnectClient(string accountName, string connectionId);
         Task DisconnectClient(string accountName, string connectionId);

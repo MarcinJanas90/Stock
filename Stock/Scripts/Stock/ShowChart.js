@@ -22,7 +22,7 @@ Stock.client.showChart = function (dataJson, namesJson) {
         '</tr>'
     );
 
-    $('#chartCell').append('<canvas id="myChart" width="500" height="auto"></canvas>');
+    $('#chartCell').append('<canvas id="myChart" width="500" height="500"></canvas>');
     var dataArray = $.parseJSON(dataJson);
     var namesArray = $.parseJSON(namesJson);
     var labels = [];

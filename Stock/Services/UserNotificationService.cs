@@ -12,12 +12,12 @@ using Stock.App_Start;
 
 namespace Stock.Services
 {
-    public class UserNotificationServiceProvider : IUserNotificationServiceProvider
+    public class UserNotificationService : IUserNotificationService
     {
         private IHubContext _StockHubContext;
         private ApplicationDbContext _applicationDbContext;
 
-        public UserNotificationServiceProvider()
+        public UserNotificationService()
         {
             _StockHubContext = GlobalHost.ConnectionManager.GetHubContext<StockHub>();
             _applicationDbContext = new ApplicationDbContext();

@@ -11,12 +11,12 @@ using System.Web.Security;
 
 namespace Stock.Services
 {
-    public class ConnectionServiceProvider : IConnectionServiceProvider
+    public class ConnectionService : IConnectionService
     {
         private ApplicationDbContext _applicationDbContext;
         private IHubContext _StockHubContext;
 
-        public ConnectionServiceProvider()
+        public ConnectionService()
         {
             _applicationDbContext = new ApplicationDbContext();
             _StockHubContext = GlobalHost.ConnectionManager.GetHubContext<StockHub>();

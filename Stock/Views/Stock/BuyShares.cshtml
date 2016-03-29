@@ -45,7 +45,16 @@
 
         @Html.HiddenFor(model => model.UnitNumber)
         <input type="hidden" value="@Model.UnitNumber" id="@Html.DisplayNameFor(model => model.UnitNumber)"/>
-        
+
+        @Html.HiddenFor(model => model.CompanyName)
+        <input type="hidden" value="@Model.CompanyName" id="@Html.DisplayNameFor(model => model.CompanyName)" />
+
+        @Html.HiddenFor(model => model.UnitPrice)
+        <input type="hidden" value="@Model.UnitPrice" id="@Html.DisplayNameFor(model => model.UnitPrice)" />
+
+        @Html.HiddenFor(model => model.PublicationDate)
+        <input type="hidden" value="@Model.PublicationDate" id="@Html.DisplayNameFor(model => model.PublicationDate)" />
+
         <div class="form-group">
             @Html.LabelFor(model => model.SharesBoughtAmount, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -55,8 +64,11 @@
         </div>
 
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Buy Shares" class="btn btn-default" id="buySharesButton" />
+            <div class="col-md-offset-2 col-md-1">
+                <input type="submit" value="Confirm" class="btn btn-default" />
+            </div>
+            <div class="col-md-1">
+                <a href="/Stock/Index" type="button" class="btn btn-default">Back to Stock</a>
             </div>
         </div>
     </div>

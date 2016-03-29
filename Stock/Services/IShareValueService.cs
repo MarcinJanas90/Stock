@@ -7,7 +7,7 @@ using Stock.Models;
 
 namespace Stock.Services
 {
-    public interface IShareValueServiceProvider
+    public interface IShareValueService
     {
         Task GetActualShareValues();
 

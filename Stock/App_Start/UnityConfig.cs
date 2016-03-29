@@ -38,8 +38,8 @@ namespace Stock.App_Start
 
             // TODO: Register your types here
             // container.RegisterType<IProductRepository, ProductRepository>();
-            container.RegisterType<IAuthenticationServiceProvider, AuthenticationServiceProvider>();
-            container.RegisterType<IShareMarketingServiceProvider, ShareMarketingServiceProvider>();
+            container.RegisterType<IAuthenticationService, AuthenticationService>();
+            container.RegisterType<IShareMarketingService, ShareMarketingService>();
         }
     }
 }

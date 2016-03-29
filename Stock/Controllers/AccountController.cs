@@ -12,9 +12,9 @@ namespace Stock.Controllers
 {
     public class AccountController : Controller
     {
-        private IAuthenticationServiceProvider _AuthenticationServiceProvider;
+        private IAuthenticationService _AuthenticationServiceProvider;
 
-        public AccountController(IAuthenticationServiceProvider authenticationServiceProvider)
+        public AccountController(IAuthenticationService authenticationServiceProvider)
         {
             _AuthenticationServiceProvider = authenticationServiceProvider;
         }
@@ -39,12 +39,12 @@ namespace Stock.Controllers
             {
                 var Status = await _AuthenticationServiceProvider.Login(account.AccountName, account.AccountPassword);
 
-                if (Status.Equals(HttpStatusCode.OK))
+                if (Status)
                 {
                     return RedirectToAction("Index", "Stock");
                 }
 
-                return new HttpStatusCodeResult(Status);
+                return View();
             }
 
             return View();
@@ -65,12 +65,12 @@ namespace Stock.Controllers
             {
                 var Status = await _AuthenticationServiceProvider.Register(account.AccountName, account.AccountPassword, account.AccountWallet);
 
-                if (Status.Equals(HttpStatusCode.OK))
+                if (Status)
                 {
                     return RedirectToAction("Index", "Stock");
                 }
 
-                return new HttpStatusCodeResult(Status);
+                return View();
             }
 
             return View();
@@ -81,12 +81,12 @@ namespace Stock.Controllers
         {
             var Status = await _AuthenticationServiceProvider.Logout(User.Identity.Name);
 
-            if (Status.Equals(HttpStatusCode.OK))
+            if (Status)
             {
                 return RedirectToAction("Index", "Home");
             }
 
-            return new HttpStatusCodeResult(Status);
+            return View();
         }
 
         // GET: Account/EditAccountName
@@ -105,12 +105,12 @@ namespace Stock.Controllers
             {
                 var Status = await _AuthenticationServiceProvider.EditAccountName(User.Identity.Name, editAccountViewModel.NewAccountName, editAccountViewModel.AccountPassword);
 
-                if (Status.Equals(HttpStatusCode.OK))
+                if (Status)
                 {
                     return RedirectToAction("Index", "Stock");
                 }
 
-                return new HttpStatusCodeResult(Status);
+                return View();
             }
             else
             {
@@ -163,11 +163,11 @@ namespace Stock.Controllers
             {
                 var Status = await _AuthenticationServiceProvider.EditAccountWallet(User.Identity.Name, _editAccountWalletViewModel.AccountPassword, _editAccountWalletViewModel.WalletToAdd, _editAccountWalletViewModel.WalletToSubtract);
 
-                if (Status.Equals(HttpStatusCode.OK))
+                if (Status)
                 {
                     return RedirectToAction("Index", "Stock");
                 }
-                return new HttpStatusCodeResult(Status);
+                return View();
             }
 
             return View();

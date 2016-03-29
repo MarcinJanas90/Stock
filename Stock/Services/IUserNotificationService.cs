@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Stock.Services
 {
-    public interface IUserNotificationServiceProvider
+    public interface IUserNotificationService
     {
         Task RenderStockPrices(string connectionId);
         Task RenderWallet(string connectionId);

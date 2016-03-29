@@ -9,7 +9,7 @@ using System.Net;
 
 namespace Stock.Services
 {
-    public interface IShareMarketingServiceProvider
+    public interface IShareMarketingService
     {
         Task<Share> GetLatestShareInformationByCompanyCode(string companyCode);
 
@@ -17,8 +17,8 @@ namespace Stock.Services
 
         Task<SoldShareViewModel> GetCurrentSoldShareInformation(string accountName, string companyCode);
 
-        Task<HttpStatusCode> BuyShare(string accountName, string shareCompanyCode, int numberOfShares);
+        Task<bool> BuyShare(string accountName, string shareCompanyCode, int numberOfShares);
 
-        Task<HttpStatusCode> SellShare(string accountName, string shareCompanyCode, int numberOfShares);
+        Task<bool> SellShare(string accountName, string shareCompanyCode, int numberOfShares);
     }
 }

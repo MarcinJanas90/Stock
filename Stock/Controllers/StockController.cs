@@ -12,9 +12,9 @@ namespace Stock.Controllers
 {
     public class StockController : Controller
     {
-        private IShareMarketingServiceProvider _shareMarketServiceProvider;
+        private IShareMarketingService _shareMarketServiceProvider;
 
-        public StockController(IShareMarketingServiceProvider shareMarketServiceProvider)
+        public StockController(IShareMarketingService shareMarketServiceProvider)
         {
             _shareMarketServiceProvider = shareMarketServiceProvider;
         }
@@ -49,15 +49,15 @@ namespace Stock.Controllers
             {
                 var Status = await _shareMarketServiceProvider.BuyShare(User.Identity.Name, boughShareViewModel.CompanyCode, boughShareViewModel.SharesBoughtAmount);
                 
-                if (Status.Equals(HttpStatusCode.OK))
+                if (Status)
                 {
                     return RedirectToAction("Index", "Stock");
                 }
 
-                return new HttpStatusCodeResult(Status);
+                return View(boughShareViewModel);
             }
 
-            return View();
+            return View(boughShareViewModel);
         }
 
         // GET: Stock/SellShares/companyCode
@@ -83,15 +83,15 @@ namespace Stock.Controllers
             {
                 var Status = await _shareMarketServiceProvider.SellShare(User.Identity.Name, soldShareViewModel.CompanyCode, soldShareViewModel.NumberOfSoldShares);
 
-                if (Status.Equals(HttpStatusCode.OK))
+                if (Status)
                 {
                     return RedirectToAction("Index", "Stock");
                 }
 
-                return new HttpStatusCodeResult(Status);
+                return View(soldShareViewModel);
             }
 
-            return View();
+            return View(soldShareViewModel);
         }
 
     }

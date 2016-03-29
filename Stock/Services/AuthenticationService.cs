@@ -11,27 +11,27 @@ using System.Web.Security;
 
 namespace Stock.Services
 {
-    public class AuthenticationServiceProvider : IAuthenticationServiceProvider
+    public class AuthenticationService : IAuthenticationService
     {
         private ApplicationDbContext _applicationDbContext;
 
-        public AuthenticationServiceProvider()
+        public AuthenticationService()
         {
             _applicationDbContext = new ApplicationDbContext();
         }
 
-        public async Task<HttpStatusCode> EditAccountName(string currentAccountName, string newAccountName, string accountPassword)
+        public async Task<bool> EditAccountName(string currentAccountName, string newAccountName, string accountPassword)
         {
             Account _account = await _applicationDbContext.Accounts.FirstOrDefaultAsync(x => x.AccountName == currentAccountName && x.AccountPassword == accountPassword);
 
             if (_account == null)
             {
-                return HttpStatusCode.NotFound;
+                return false;
             }
 
             if(await _applicationDbContext.Accounts.FirstOrDefaultAsync(x=>x.AccountName==newAccountName)!= null)
             {
-                return HttpStatusCode.BadRequest;
+                return false;
             }
 
             _account.AccountName = newAccountName;
@@ -39,41 +39,41 @@ namespace Stock.Services
             FormsAuthentication.SetAuthCookie(_account.AccountName, false);
             await _applicationDbContext.SaveChangesAsync();
 
-            return HttpStatusCode.OK;        
+            return true;        
         }
 
-        public async Task<HttpStatusCode> EditAccountPassword(string accountName, string currentAccountPassword, string newAccountPassword, string confirmNewAccountPassword)
+        public async Task<bool> EditAccountPassword(string accountName, string currentAccountPassword, string newAccountPassword, string confirmNewAccountPassword)
         {
             Account _account = await _applicationDbContext.Accounts.FirstOrDefaultAsync(x => x.AccountName == accountName && x.AccountPassword == currentAccountPassword);
 
             if (_account == null)
             {
-                return HttpStatusCode.NotFound;
+                return false;
             }
 
             if (newAccountPassword != confirmNewAccountPassword)
             {
-                return HttpStatusCode.BadRequest;
+                return false;
             }
 
             _account.AccountPassword = newAccountPassword;
             await _applicationDbContext.SaveChangesAsync();
 
-            return HttpStatusCode.OK;
+            return true;
         }
 
-        public async Task<HttpStatusCode> EditAccountWallet(string accountName, string accountPassword, double moneyToAdd, double moneyToSubtract)
+        public async Task<bool> EditAccountWallet(string accountName, string accountPassword, double moneyToAdd, double moneyToSubtract)
         {
             Account _account = await _applicationDbContext.Accounts.FirstOrDefaultAsync(x => x.AccountName == accountName && x.AccountPassword == accountPassword);
 
             if (_account == null)
             {
-                return HttpStatusCode.NotFound;
+                return false;
             }
 
             if ((moneyToAdd == 0 && moneyToSubtract == 0) || (moneyToAdd > 0 && moneyToSubtract > 0) || moneyToSubtract > _account.AccountWallet)
             {
-                return HttpStatusCode.BadRequest;
+                return false;
             }
 
             if (moneyToAdd > 0)
@@ -87,7 +87,7 @@ namespace Stock.Services
 
             await _applicationDbContext.SaveChangesAsync();
 
-            return HttpStatusCode.OK;
+            return true;
         }
 
         public async Task<EditAccountWalletViewModel> GetCurrentWallet(string accountName)
@@ -105,50 +105,50 @@ namespace Stock.Services
             return _editAccountWalletViewModel;
         }
 
-        public async Task<HttpStatusCode> Login(string accountName, string accountPassword)
+        public async Task<bool> Login(string accountName, string accountPassword)
         {
             Account _account = await _applicationDbContext.Accounts.FirstOrDefaultAsync(x => x.AccountName == accountName && x.AccountPassword == accountPassword);
 
             if (_account == null)
             {
-                return HttpStatusCode.NotFound;
+                return false;
             }
 
             if (_account.IsAuthenticated == true)
             {
-                return HttpStatusCode.BadRequest;
+                return false;
             }
 
             FormsAuthentication.SetAuthCookie(accountName, false);
 
             _account.IsAuthenticated = true;
             await _applicationDbContext.SaveChangesAsync();
-            return HttpStatusCode.OK;
+            return true;
         }
 
-        public async Task<HttpStatusCode> Logout(string accountName)
+        public async Task<bool> Logout(string accountName)
         {
             Account _account = await _applicationDbContext.Accounts.FirstOrDefaultAsync(x => x.AccountName == accountName);
 
             if (_account == null)
             {
-                return HttpStatusCode.NotFound;
+                return false;
             }
 
             FormsAuthentication.SignOut();
             _account.IsAuthenticated = false;
             await _applicationDbContext.SaveChangesAsync();
 
-            return HttpStatusCode.OK;
+            return true;
         }
 
-        public async Task<HttpStatusCode> Register(string accountName, string accountPassword,double accountWallet)
+        public async Task<bool> Register(string accountName, string accountPassword,double accountWallet)
         {
             Account _account = await _applicationDbContext.Accounts.FirstOrDefaultAsync(x => x.AccountName == accountName);
 
             if (_account != null)
             {
-                return HttpStatusCode.BadRequest;
+                return false;
             }
 
             _account = new Account(accountName,accountPassword);
@@ -158,7 +158,7 @@ namespace Stock.Services
             _applicationDbContext.Accounts.Add(_account);
             await _applicationDbContext.SaveChangesAsync();
 
-            return HttpStatusCode.OK;
+            return true;
         }
     }
 }

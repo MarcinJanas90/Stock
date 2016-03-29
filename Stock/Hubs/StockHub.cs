@@ -14,10 +14,10 @@ namespace Stock.Hubs
     [HubName("StockHub")]
     public class StockHub : Hub
     {
-        private IConnectionServiceProvider _connectionServiceProvider;
-        private IUserNotificationServiceProvider _userNotificationServiceProvider;
+        private IConnectionService _connectionServiceProvider;
+        private IUserNotificationService _userNotificationServiceProvider;
 
-        public StockHub(IConnectionServiceProvider connectionServiceProvider, IUserNotificationServiceProvider userNotificationServiceProvider)
+        public StockHub(IConnectionService connectionServiceProvider, IUserNotificationService userNotificationServiceProvider)
         {
             _connectionServiceProvider = connectionServiceProvider;
             _userNotificationServiceProvider = userNotificationServiceProvider;

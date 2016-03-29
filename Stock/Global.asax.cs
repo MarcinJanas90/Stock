@@ -18,7 +18,7 @@ namespace Stock
     public class MvcApplication : System.Web.HttpApplication
     {
         private Timer _timer;
-        private ShareValueServiceProvider _ShareValuesServiceProvider;
+        private ShareValueService _ShareValuesServiceProvider;
 
         protected void Application_Start()
         {
@@ -27,13 +27,13 @@ namespace Stock
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            _ShareValuesServiceProvider = new ShareValueServiceProvider(new UserNotificationServiceProvider());
+            _ShareValuesServiceProvider = new ShareValueService(new UserNotificationService());
 
             ApplicationGlobals.IsRemoteServerAvalaible = true;
 
             _ShareValuesServiceProvider.InitializeShareValues();
             _timer = new Timer(10000);
-            _timer.Elapsed += ShareValueServiceProvider.GetActualShareValues;
+            _timer.Elapsed += ShareValueService.GetActualShareValues;
             _timer.Start();
         }
     }
