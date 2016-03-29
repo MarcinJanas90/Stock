@@ -26,11 +26,6 @@ namespace Stock.Services
         {
             Account _account = await _applicationDbContext.Accounts.FirstOrDefaultAsync(x => x.AccountName == accountName);
 
-            if (_account != null && !_account.IsAuthenticated)
-            {
-                FormsAuthentication.SignOut();
-            }
-
             if (_account != null && _account.IsAuthenticated)
             {
                 Connection _connection = await _applicationDbContext.Connecions.FirstOrDefaultAsync(x => x.ConnectionId == connectionId);
@@ -61,11 +56,6 @@ namespace Stock.Services
             if (_account != null)
             {
                 _account.AccountConnections.Remove(_connection);
-            }
-
-            if (_account.AccountConnections.Count == 0)
-            {
-                _account.IsAuthenticated = false;
             }
 
             await _applicationDbContext.SaveChangesAsync();
